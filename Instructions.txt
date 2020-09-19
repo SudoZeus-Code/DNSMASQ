@@ -1,0 +1,44 @@
+Instructions
+
+  (Re)start dnsmasq service. You can check status of dnsmasq with systemctl command.
+
+    sudo service dnsmasq restart
+    sudo systemctl status dnsmasq.service
+
+    Also you need to set the dnsmasq server ip. My network interface name was enp5s0. Set it as yours. Also, the server address was set to 192.168.0.10 in the following example.
+
+    # interfaces(5) file used by ifup(8) and ifdown(8)
+    auto lo
+    iface lo inet loopback
+
+    auto enp5s0
+    iface enp5s0 inet static
+    address 192.168.0.10
+    netmask 255.255.255.0
+    broadcast 192.168.0.255
+    network 192.168.0.1
+
+    Restart networking service. If it does not work, just reboot the machine.
+
+    sudo service networking restart
+
+    You need to disable DHCP server functionality of your router. Restart the dnsmasq service after disabling it.
+
+Other tips
+
+    You can register dnsmasq as startup service. (Make it run whenever the machine is rebooted.)
+
+    update-rc.d dnsmasq defaults
+
+    Checking the list of current clients that received IPs from DHCP service.
+
+    sudo cat /var/lib/misc/dnsmasq.leases
+
+    To read logs when the log file is not set in the configuration file.
+
+    sudo journalctl -u dnsmasq.service
+
+    To test the configuration.
+
+    dnsmasq --test
+
